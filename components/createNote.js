@@ -3,10 +3,12 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Creates a hash key for using the title, note and current time
 const generateHash = (title, note) => {
   return `${ title }_${ new Date().getTime() }_${ note }`;
 }
 
+// Stores the data as a JSON file using AsyncStorage
 const storeData = async (title, note) => {
   const data = {
       'title': title,
@@ -52,7 +54,7 @@ export default function CreateNote() {
         placeholder='Notes'
         placeholderTextColor='grey'
         multiline={true}
-        enablesReturnKeyAutomatically={true}
+        enablesReturnKeyAutomatically={true} // I added this in otherwise there is an error where the user cannot reaccess the note prompt
         value={note}
      />
     </View>
