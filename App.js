@@ -1,21 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
+import MyNotes from "./components/MyNotes.js";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+      <Text style={styles.heading}>My Notes</Text>
       <StatusBar style="auto" />
-    </View>
+      <MyNotes/>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  heading: {
+    fontSize: 68,
+    fontWeight: '500',
+    backgroundColor: '#EDB2B2',
+    height: '15%',
+    textAlign: 'center',
+    width: '100%',
+  },
+
   container: {
+    display: 'flex',
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'start',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: '100%'
   },
 });

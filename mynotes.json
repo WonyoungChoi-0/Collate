@@ -1,0 +1,57 @@
+{
+    "Mobile App Development": {
+        "notes": [{
+            "Title" : "Day 1 Notes",
+            "Content": "Hello. These are my notes from Day 1 of Mobile App Dev.jbsiBWFCUIQBWEVUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDAUBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
+            "Date Created": "2021-08-24",
+            "key": "0"
+        },
+        {
+            "Title" : "Day 2 Notes",
+            "Content": "Hello. These are my notes from Day 2 of Mobile App Dev.",
+            "Date Created": "2021-08-26",
+            "key": "1"
+        }
+        ]
+    },
+
+    "Machine Learning": {
+    "notes": [{
+        "Title" : "Day 1 Notes",
+        "Content": "Hello. These are my notes from Day 1 of Machine Learning.",
+        "Date Created": "2021-08-23",
+        "key": "0"
+    },
+    {
+        "Title" : "Day 2 Notes",
+        "Content": "Hello. These are my notes from Day 2 of Machine Learning.",
+        "Date Created": "2021-08-25",
+        "key": "1"
+    }
+
+    ]
+    },
+
+    "Database Systems": {
+    "notes": 
+    [{
+        "Title" : "Exam Notes",
+        "Content": "Hello. These are my exam notes for Database Systems.",
+        "Date Created": "2021-09-27",
+        "key": "0"
+    }
+    ]
+    },
+
+    "Chemistry": {
+        "notes": 
+        [{
+            "Title" : "Periodic Table",
+            "Content": "Hello. Here is the periodic table for some reason. Might be handy for later. ",
+            "Date Created": "2021-10-03",
+            "key": "0"
+        }
+        ]
+        }
+
+}
