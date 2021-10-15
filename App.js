@@ -2,16 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
 import MyNotes from "./components/MyNotes.js";
+import CreateClass from './components/CreateClass.js';
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-      <Text style={styles.heading}>My Notes</Text>
-      <StatusBar style="auto" />
-      <MyNotes/>
-      </ScrollView>
-    </SafeAreaView>
+    // <SafeAreaView style={styles.container}>
+    //   <ScrollView>
+    //   <Text style={styles.heading}>My Notes</Text>
+    //   <StatusBar style="auto" />
+    //   <MyNotes/>
+    //   </ScrollView>
+    // </SafeAreaView>
+
+    <CreateClass/>
   );
 }
 
