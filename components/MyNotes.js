@@ -1,20 +1,47 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, SectionList, SafeAreaView } from 'react-native';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Text, View, ScrollView, SectionList, SafeAreaView, FlatList } from 'react-native';
 import mynotes from "../mynotes.json"
+import { render } from 'react-dom';
 
 
 export default function MyNotes(){
-    return (
+   let mydata = [];
+   const [categories, setCategories] = useState([]);
+   getData().then(function getNotes(value){
+       updateMyData(value);
+    }).then(() => {return element})
+
+    function updateMyData(data){
+        mydata  = data;
+        setCategories(Object.keys(mydata));
+    }
+
+    const element = (
         <SafeAreaView>
-        <GetNotesSection/>
+        <GetNotesSection categories={categories}/>
         </SafeAreaView>
     );
+    
+    return element;
+
 }
 
-function GetNotesSection(){
-    var categories = Object.keys(mynotes);
+const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@mynotes')
+      let parsedData =  JSON.parse(jsonValue);
+      return parsedData;
+    } catch(e) {
+        console.log("error saving value")
+    }
+  }
+  
+
+function GetNotesSection(props){
     return (
-        categories.map(
+        props.categories.map(
             function(category){
                 return (
                 <SectionList sections = {[
@@ -42,7 +69,6 @@ function GetNotesSection(){
             }
         )
     )
-
 }
 
 const styles = StyleSheet.create({

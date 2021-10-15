@@ -1,19 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
 import MyNotes from "./components/MyNotes.js";
+import mynotes from "./mynotes.json";
+
 
 export default function App() {
+  initializeData(mynotes);
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
       <Text style={styles.heading}>My Notes</Text>
-      <StatusBar style="auto" />
+      <StatusBar style="auto"/>
       <MyNotes/>
-      </ScrollView>
     </SafeAreaView>
   );
 }
+
+
+const initializeData = async (data) => {
+  let key = '@mynotes';
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.log("Error Saving Data");
+    console.log(e);
+  }
+}
+
 
 const styles = StyleSheet.create({
   heading: {
@@ -33,6 +47,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '100%'
+    marginTop: 100,
   },
 });
