@@ -7,21 +7,23 @@ import { render } from 'react-dom';
 
 
 export default function MyNotes(){
-   let mydata = [];
+   const [mydata, setMyData] = useState([]);
    const [categories, setCategories] = useState([]);
    getData().then(function getNotes(value){
        updateMyData(value);
     }).then(() => {return element})
 
     function updateMyData(data){
-        mydata  = data;
+        setMyData(data);
         setCategories(Object.keys(mydata));
     }
 
     const element = (
         <SafeAreaView>
+        <ScrollView>
         <Text style={styles.heading}>My Notes</Text>
-        <GetNotesSection categories={categories}/>
+        <GetNotesSection categories={categories} data={mydata}/>
+        </ScrollView>
         </SafeAreaView>
     );
     
@@ -38,6 +40,11 @@ const getData = async () => {
         console.log("error saving value")
     }
   }
+
+  const getNotes = async(data, category) => {
+      const notes = await data[category]["notes"]
+      return notes;
+  }
   
 
 function GetNotesSection(props){
@@ -46,7 +53,7 @@ function GetNotesSection(props){
             function(category){
                 return (
                 <SectionList sections = {[
-                    {title: {category}, data: mynotes[category]["notes"]}
+                    {title: {category}, data: props.data[category]["notes"]}
                 ]} 
                 renderItem = {
                     ({item}) =>
