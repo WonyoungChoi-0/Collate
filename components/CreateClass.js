@@ -69,7 +69,7 @@ export default function CreateClass(){
                     value={text}
                 />
                 <Button
-                    title="Create"
+                    title="Create Class"
                     style={styles.button}
                     onPress={() => addClass(text)}
                 />
@@ -85,6 +85,11 @@ export default function CreateClass(){
                     setValue={setValue}
                     setItems={setItems}
                     // dropDownDirection="TOP"
+                />
+                <Button
+                    title="Create Note"
+                    style={styles.button}
+                    onPress={() => addClass(text)}
                 />
             </View>
         </View>

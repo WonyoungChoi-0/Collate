@@ -7,13 +7,15 @@ import CreateNote from './components/CreateNote.js';
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-      <Text style={styles.heading}>My Notes</Text>
-      <StatusBar style="auto" />
-      <MyNotes/>
-      </ScrollView>
-    </SafeAreaView>
+    // <SafeAreaView style={styles.container}>
+    //   <ScrollView>
+    //   <Text style={styles.heading}>My Notes</Text>
+    //   <StatusBar style="auto" />
+    //   <MyNotes/>
+    //   </ScrollView>
+    // </SafeAreaView>
+
+    <CreateClass/>
   );
 }
 
