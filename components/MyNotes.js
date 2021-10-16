@@ -47,7 +47,8 @@ const getData = async () => {
   }
   
 
-function GetNotesSection(props){
+function GetNotesSection(props){ 
+
     return (
         props.categories.map(
             function(category){
