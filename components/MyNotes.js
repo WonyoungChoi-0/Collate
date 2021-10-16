@@ -1,24 +1,59 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, SectionList, SafeAreaView } from 'react-native';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Text, View, ScrollView, SectionList, SafeAreaView, FlatList } from 'react-native';
 import mynotes from "../mynotes.json"
+import { render } from 'react-dom';
 
 
 export default function MyNotes(){
-    return (
+   const [mydata, setMyData] = useState([]);
+   const [categories, setCategories] = useState([]);
+   getData().then(function getNotes(value){
+       updateMyData(value);
+    }).then(() => {return element})
+
+    function updateMyData(data){
+        setMyData(data);
+        setCategories(Object.keys(mydata));
+    }
+
+    const element = (
         <SafeAreaView>
-        <GetNotesSection/>
+        <ScrollView>
+        <Text style={styles.heading}>My Notes</Text>
+        <GetNotesSection categories={categories} data={mydata}/>
+        </ScrollView>
         </SafeAreaView>
     );
+    
+    return element;
+
 }
 
-function GetNotesSection(){
-    var categories = Object.keys(mynotes);
+const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@mynotes')
+      let parsedData =  JSON.parse(jsonValue);
+      return parsedData;
+    } catch(e) {
+        console.log("error saving value")
+    }
+  }
+
+  const getNotes = async(data, category) => {
+      const notes = await data[category]["notes"]
+      return notes;
+  }
+  
+
+function GetNotesSection(props){
     return (
-        categories.map(
+        props.categories.map(
             function(category){
                 return (
                 <SectionList sections = {[
-                    {title: {category}, data: mynotes[category]["notes"]}
+                    {title: {category}, data: props.data[category]["notes"]}
                 ]} 
                 renderItem = {
                     ({item}) =>
@@ -42,10 +77,17 @@ function GetNotesSection(){
             }
         )
     )
-
 }
 
 const styles = StyleSheet.create({
+    heading: {
+        fontSize: 68,
+        fontWeight: '500',
+        backgroundColor: '#EDB2B2',
+        height: '15%',
+        textAlign: 'center',
+        width: '100%',
+      },
     sectionText: {
         fontWeight: "200",
         borderColor: '#EDB2B2',

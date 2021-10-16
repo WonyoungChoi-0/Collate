@@ -1,32 +1,32 @@
 {
     "Mobile App Development": {
         "notes": [{
+            "key": "0",
             "Title" : "Day 1 Notes",
             "Content": "Hello. These are my notes from Day 1 of Mobile App Dev.jbsiBWFCUIQBWEVUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDAUBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV",
-            "Date Created": "2021-08-24",
-            "key": "0"
+            "Date Created": "2021-08-24"
         },
         {
+            "key": "1",
             "Title" : "Day 2 Notes",
             "Content": "Hello. These are my notes from Day 2 of Mobile App Dev.",
-            "Date Created": "2021-08-26",
-            "key": "1"
+            "Date Created": "2021-08-26"
         }
         ]
     },
 
     "Machine Learning": {
     "notes": [{
+        "key": "0",
         "Title" : "Day 1 Notes",
         "Content": "Hello. These are my notes from Day 1 of Machine Learning.",
-        "Date Created": "2021-08-23",
-        "key": "0"
+        "Date Created": "2021-08-23"
     },
     {
+        "key": "1",
         "Title" : "Day 2 Notes",
         "Content": "Hello. These are my notes from Day 2 of Machine Learning.",
-        "Date Created": "2021-08-25",
-        "key": "1"
+        "Date Created": "2021-08-25"
     }
 
     ]
@@ -35,10 +35,10 @@
     "Database Systems": {
     "notes": 
     [{
+        "key": "0",
         "Title" : "Exam Notes",
         "Content": "Hello. These are my exam notes for Database Systems.",
-        "Date Created": "2021-09-27",
-        "key": "0"
+        "Date Created": "2021-09-27"
     }
     ]
     },
@@ -46,10 +46,10 @@
     "Chemistry": {
         "notes": 
         [{
+            "key": "0",
             "Title" : "Periodic Table",
             "Content": "Hello. Here is the periodic table for some reason. Might be handy for later. ",
-            "Date Created": "2021-10-03",
-            "key": "0"
+            "Date Created": "2021-10-03"
         }
         ]
         }
