@@ -9,6 +9,11 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.9",
+<<<<<<< HEAD
+=======
+    "@react-navigation/bottom-tabs": "^6.0.9",
+    "@react-navigation/native": "^6.0.6",
+>>>>>>> 4aadc1cb4e0659df6a285a009e39b0796807885f
     "expo": "~42.0.1",
     "expo-cli": "^4.12.1",
     "expo-status-bar": "~1.0.4",
