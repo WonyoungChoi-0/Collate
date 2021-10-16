@@ -18,6 +18,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="MyNotes" component={MyNotes} />
+        <Tab.Screen name="CreateClass" component={CreateClass} />
       </Tab.Navigator>
     </NavigationContainer>
   );
