@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontSize: 30,
         width: '100%'
-
     },
     noteTitle: {
         fontWeight: "bold"
@@ -104,7 +103,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexWrap: 'wrap', 
         width: '100%',
-        height: '15px'
     },
     categoryCard: {
         paddingTop: '15%',
