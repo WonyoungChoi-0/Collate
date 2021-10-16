@@ -17,9 +17,10 @@ export default function MyNotes(){
 
     useEffect(() => {
         getData().then(function getNotes(value){
-            updateMyData(value);
+            setMyData(value);
+            setCategories(Object.keys(mydata));
          }).then(() => {return element})
-    }, []);
+    }, [mydata]);
 
     const element = (
         <SafeAreaView>
@@ -37,7 +38,7 @@ export default function MyNotes(){
 const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@mynotes')
-      let parsedData =  JSON.parse(jsonValue);
+      let parsedData = await JSON.parse(jsonValue);
       return parsedData;
     } catch(e) {
         console.log("error saving value")
@@ -55,6 +56,7 @@ function GetNotesSection(props){
     return (
         props.categories.map(
             function(category){
+                console.log(category);
                 return (
                 <SectionList sections = {[
                     {title: {category}, data: props.data[category]["notes"]}

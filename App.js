@@ -9,7 +9,7 @@ import CreateClass from './components/CreateClass.js';
 import CreateNote from './components/CreateNote.js';
 import mynotes from "./mynotes.json";
 import { LogBox } from 'react-native';
-LogBox.ignoreAllLogs();
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const Tab = createBottomTabNavigator();
 

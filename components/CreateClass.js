@@ -23,9 +23,6 @@ export default function CreateClass(){
                 }
 
                 await AsyncStorage.setItem('@mynotes', JSON.stringify(myNotes));
-                    
-                myNotes = await AsyncStorage.getItem('@mynotes');
-                console.log(myNotes);
             } catch (error) {
                 console.log(error)
             }
