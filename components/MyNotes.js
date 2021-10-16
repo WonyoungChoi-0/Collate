@@ -9,14 +9,17 @@ import { render } from 'react-dom';
 export default function MyNotes(){
    const [mydata, setMyData] = useState([]);
    const [categories, setCategories] = useState([]);
-   getData().then(function getNotes(value){
-       updateMyData(value);
-    }).then(() => {return element})
 
     function updateMyData(data){
         setMyData(data);
         setCategories(Object.keys(mydata));
     }
+
+    useEffect(() => {
+        getData().then(function getNotes(value){
+            updateMyData(value);
+         }).then(() => {return element})
+    }, []);
 
     const element = (
         <SafeAreaView>
