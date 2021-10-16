@@ -1,22 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
 import MyNotes from "./components/MyNotes.js";
 import mynotes from "./mynotes.json";
 
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   initializeData(mynotes);
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.heading}>My Notes</Text>
-      <StatusBar style="auto"/>
-      <MyNotes/>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="MyNotes" component={MyNotes} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
 
 const initializeData = async (data) => {
   let key = '@mynotes';

@@ -20,6 +20,7 @@ export default function MyNotes(){
 
     const element = (
         <SafeAreaView>
+        <Text style={styles.heading}>My Notes</Text>
         <GetNotesSection categories={categories}/>
         </SafeAreaView>
     );
@@ -72,6 +73,14 @@ function GetNotesSection(props){
 }
 
 const styles = StyleSheet.create({
+    heading: {
+        fontSize: 68,
+        fontWeight: '500',
+        backgroundColor: '#EDB2B2',
+        height: '15%',
+        textAlign: 'center',
+        width: '100%',
+      },
     sectionText: {
         fontWeight: "200",
         borderColor: '#EDB2B2',
