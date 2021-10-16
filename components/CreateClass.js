@@ -10,23 +10,32 @@ export default function CreateClass(){
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([]);
     const [text, onChangeText] = useState("");
+
+    const addClass = async (className) => {
+        if(!items.includes({label: className, value: className})) {
+            try{
+                var myNotes = await AsyncStorage.getItem('@mynotes'); // getting all existing notes
+
+                myNotes = JSON.parse(myNotes);
+
+                myNotes[className] = { // text = new class name
+                    notes: []
+                }
+
+                await AsyncStorage.setItem('@mynotes', JSON.stringify(myNotes));
+                    
+                myNotes = await AsyncStorage.getItem('@mynotes');
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        onChangeText("");
+    }
     
     useEffect(() => {
         const getClasses = async () => {
             var myNotes;
-
-            const data = {
-                'Mobile App Development': 'world',
-                'Machine Learning': 'hello'
-            };
-
-            //Testing 
-            try {
-                await AsyncStorage.setItem('@mynotes', JSON.stringify(data));
-            } catch (error) {
-                console.log(error);
-            }
-
+            
             try {
                 myNotes = await AsyncStorage.getItem('@mynotes');
                 if(myNotes === null) {
@@ -37,6 +46,7 @@ export default function CreateClass(){
             }
 
             myNotes = await JSON.parse(myNotes);
+            console.log(myNotes);
             let categories = Object.keys(myNotes);
 
             categories.map((category) => {
@@ -48,26 +58,35 @@ export default function CreateClass(){
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Create a New Class</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={onChangeText}
-                value={text}
-            />
-            <Button
-                title="Create"
-                onPress={() => Alert.alert('Simple Button pressed')}
-            />
-            <Text style={styles.header}>Select a Class</Text>
-            <DropDownPicker
-                style={styles.dropDown}
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-            />
+            <View style={styles.header}>
+                <Text style={styles.title}>Classes</Text>
+            </View>
+            <View style={styles.div}>
+                <Text style={styles.subtitle}>Create a New Class</Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={onChangeText}
+                    value={text}
+                />
+                <Button
+                    title="Create"
+                    style={styles.button}
+                    onPress={() => addClass(text)}
+                />
+            </View>
+            <View style={styles.div}>
+                <Text style={styles.subtitle}>Select Existing Class</Text>
+                <DropDownPicker
+                    style={styles.dropDown}
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
+                    // dropDownDirection="TOP"
+                />
+            </View>
         </View>
     );
 }
@@ -75,22 +94,50 @@ export default function CreateClass(){
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
-        justifyContent: 'center',
         flexDirection: 'column',
-        alignItems: 'center',
-        height: '50%',
+        height: '100%',
+        marginTop: '15%',
     },
     header: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '10%',
+        backgroundColor: 'blue',
+    },
+    title: {
         fontSize: 30,
-        margin:  'auto',
-        textAlign: 'center',
-        marginTop: '5%'
+        fontWeight: '700',
+        color: 'white',
+    },
+    subtitle: {
+        fontWeight: '500',
+        fontSize: 20,
+        marginBottom: '4%',
+        textAlign: 'center'
+    },
+    div: {
+        marginTop: '10%',
+        paddingLeft: '5%',
+        paddingRight: '5%',
+        height: '15%'
     },
     dropDown: {
-
+        borderColor: 'blue',
+        borderRadius: 30,
+        backgroundColor: 'white',
+        paddingLeft: '5%',
+        paddingRight: '5%',
+        // drop down menu showing up transparent, zindex/backgroundcolor/elevation fix not working
     },
     input: {
         borderWidth: 1,
-        marginBottom: '1%'
-    }
+        borderColor: 'blue',
+        height: '35%',
+        borderRadius: 30,
+        paddingLeft: '5%',
+    },
+    button: {
+        // you can't style Button, switch to Pressable/Touchable
+    },
 })
