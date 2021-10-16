@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexWrap: 'wrap', 
         width: '100%',
-        height: '15pt'
     },
     categoryCard: {
         paddingTop: '15%',
