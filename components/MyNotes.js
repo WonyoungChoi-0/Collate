@@ -59,7 +59,6 @@ function GetNotesSection(props){
     return (
         props.categories.map(
             function(category){
-                console.log(category);
                 return (
                 <SectionList sections = {[
                     {title: {category}, data: props.data[category]["notes"]}
