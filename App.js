@@ -20,6 +20,7 @@ export default function App() {
       <Tab.Navigator initalRouteName="MyNotes">
         <Tab.Screen name="MyNotes" component={MyNotes} />
         <Tab.Screen name="CreateClass" component={CreateClass} />
+        <Tab.Screen name="CreateNote" component={CreateNote} />
       </Tab.Navigator>
     </NavigationContainer>
   );

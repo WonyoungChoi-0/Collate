@@ -4,7 +4,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function CreateClass(){
+export default function CreateClass({ navigation }){
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -22,7 +22,9 @@ export default function CreateClass(){
                     notes: []
                 }
 
-                await AsyncStorage.setItem('@mynotes', JSON.stringify(myNotes));
+                myNotes = JSON.stringify(myNotes);
+
+                await AsyncStorage.setItem('@mynotes', myNotes);
             } catch (error) {
                 console.log(error)
             }
@@ -69,7 +71,10 @@ export default function CreateClass(){
                 <Button
                     title="Create Class"
                     style={styles.button}
-                    onPress={() => addClass(text)}
+                    onPress={() => {
+                        // addClass(text);
+                        onChangeText("");
+                    }}
                 />
             </View>
             <View style={styles.div}>
@@ -87,11 +92,22 @@ export default function CreateClass(){
                 <Button
                     title="Create Note"
                     style={styles.button}
-                    onPress={() => addClass(text)}
+                    onPress={() => {
+                        setClass(value);
+                        navigation.navigate('CreateNote');
+                    }}
                 />
             </View>
         </View>
     );
+}
+
+const setClass = async (className) => {
+    try{
+        await AsyncStorage.setItem('@class', className);
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const styles = StyleSheet.create({

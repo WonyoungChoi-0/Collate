@@ -5,50 +5,53 @@ import { StyleSheet, Text, View, ScrollView, SectionList, SafeAreaView, FlatList
 import mynotes from "../mynotes.json"
 import { render } from 'react-dom';
 
+export default function MyNotes() {
 
-export default function MyNotes(){
-   const [mydata, setMyData] = useState([]);
-   const [categories, setCategories] = useState([]);
+    const [myData, setMyData] = useState([]); // json object of json classes and notes
+    const [categories, setCategories] = useState([]); // class names
 
-    function updateMyData(data){
-        setMyData(data);
-        setCategories(Object.keys(mydata));
+    // unused function
+    // function updateMyData(data){
+    //     setMyData(data);
+    //     setCategories(Object.keys(mydata));
+    // }
+
+    const getData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@mynotes')
+            return await JSON.parse(jsonValue);
+        } catch(e) {
+            console.log("error getting data")
+        }
+    }
+
+    const getNotes = async(data, category) => {
+        return await data[category]["notes"]
     }
 
     useEffect(() => {
-        getData().then(function getNotes(value){
+        getData().then(function getNotes(value) {
             setMyData(value);
-            setCategories(Object.keys(mydata));
-         }).then(() => {return element})
-    }, [mydata]);
+            setCategories(Object.keys(myData));
+         })
+    }, [myData]);
 
-    const element = (
+    return (
         <SafeAreaView>
-        <ScrollView>
-        <Text style={styles.heading}>My Notes</Text>
-        <GetNotesSection categories={categories} data={mydata}/>
-        </ScrollView>
+            <ScrollView>
+                <Text style={styles.heading}>My Notes</Text>
+                <GetNotesSection categories={categories} data={myData}/>
+            </ScrollView>
         </SafeAreaView>
     );
-    
-    return element;
-
 }
 
-const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@mynotes')
-      let parsedData = await JSON.parse(jsonValue);
-      return parsedData;
-    } catch(e) {
-        console.log("error saving value")
-    }
-  }
 
-  const getNotes = async(data, category) => {
-      const notes = await data[category]["notes"]
-      return notes;
-  }
+
+//   const getNotes = async(data, category) => {
+//       const notes = await data[category]["notes"]
+//       return notes;
+//   }
   
 
 function GetNotesSection(props){ 
@@ -64,9 +67,9 @@ function GetNotesSection(props){
                 renderItem = {
                     ({item}) =>
                     (   <View style={styles.noteCard}>
-                            <Text style={styles.noteTitle}>{item["Title"]}</Text>
+                            <Text style={styles.noteTitle}>{item["title"]}</Text>
                             <ScrollView style={styles.noteContent}>
-                                <Text>{item["Content"]}</Text>
+                                <Text>{item["content"]}</Text>
                             </ScrollView>
                         </View>
                         

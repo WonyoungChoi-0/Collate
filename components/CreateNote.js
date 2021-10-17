@@ -10,21 +10,40 @@ const generateHash = (title, note) => {
 
 // Stores the data as a JSON file using AsyncStorage
 const storeData = async (title, note) => {
-  const data = {
-      'title': title,
-      'note': note
-    };
 
-  let key = generateHash(title, note);
+  let className;
+
   try {
-    await AsyncStorage.setItem(key, JSON.stringify(data));
+    className = await AsyncStorage.getItem('@class')
   } catch (e) {
-    console.log("Error Saving Data");
+    console.log(e);
+  }
+
+  try {
+    let mynotes = await AsyncStorage.getItem('@mynotes');
+
+    mynotes = JSON.parse(mynotes);
+
+    const noteJSON = {
+      'key': mynotes[className]['notes'].length+1,
+      'title': title,
+      'content': note,
+      'created': new Date().getTime()
+    }
+
+    mynotes[className]['notes'].push(noteJSON);
+
+    console.log(mynotes);
+
+    mynotes = JSON.stringify(mynotes);
+
+    await AsyncStorage.setItem('@mynotes', mynotes);
+  } catch (e) {
     console.log(e);
   }
 }
 
-export default function CreateNote() {
+export default function CreateNote({ navigation }) {
   const [title, onChangeTitle] = React.useState('');
   const [note, onChangeNote] = React.useState('');
 
@@ -36,6 +55,7 @@ export default function CreateNote() {
           storeData(title, note);
           onChangeTitle('');
           onChangeNote('');
+          navigation.navigate('MyNotes');
         }}
       >
         <Text style={ styles.doneText }>Done</Text>
