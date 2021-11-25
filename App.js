@@ -1,60 +1,62 @@
-import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
-import MyNotes from "./components/MyNotes.js";
-import CreateClass from './components/CreateClass.js';
-import CreateNote from './components/CreateNote.js';
-import mynotes from "./mynotes.json";
-import { LogBox } from 'react-native';
-LogBox.ignoreAllLogs();//Ignore all log notifications
-
-const Tab = createBottomTabNavigator();
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import Navigation from './components/Navigation';
+import * as Facebook from 'expo-facebook'
+import * as SecureStore from 'expo-secure-store'
 
 export default function App() {
-  initializeData(mynotes);
-  return (
-    <NavigationContainer>
-      <Tab.Navigator initalRouteName="MyNotes">
-        <Tab.Screen name="MyNotes" component={MyNotes} />
-        <Tab.Screen name="CreateClass" component={CreateClass} />
-        <Tab.Screen name="CreateNote" component={CreateNote} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
+  
+  const [logInToken, setToken] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-const initializeData = async (data) => {
-  let key = '@mynotes';
-  try {
-    await AsyncStorage.setItem(key, JSON.stringify(data));
-  } catch (e) {
-    console.log("Error Saving Data");
-    console.log(e);
+  useEffect(() => {
+    checkForToken()
+  }, [])
+
+  const saveTokenToSecureStorage = async (_token) => {
+    await SecureStore.setItemAsync('token', _token);
+    setToken(_token)
   }
-}
 
+  const checkForToken = async () => {
+    let token = await SecureStore.getItemAsync('token')
+    setToken(token)
+    setLoading(false)
+  }  
+
+  const logIn = async () => {
+    try {
+      await Facebook.initializeAsync({appId: '918414992436403', appName: 'Collate'})
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile']
+      })
+  
+      if(type === 'success') {
+        saveTokenToSecureStorage(token) 
+      }
+  
+    } catch({message}) {
+      console.log(message)
+    }
+  }
+
+  if(logInToken === null) {
+    return (
+      <View style={styles.container}>
+        <Button title="Login With Facebook" onPress={() => logIn()}/>
+      </View>
+    );   
+  } else {
+    return <Navigation/>
+  }
+  
+}
 
 const styles = StyleSheet.create({
-  heading: {
-    fontSize: 68,
-    fontWeight: '500',
-    backgroundColor: '#EDB2B2',
-    height: '15%',
-    textAlign: 'center',
-    width: '100%',
-  },
-
   container: {
-    display: 'flex',
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'start',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100,
   },
 });
