@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateNote from './components/CreateNote';
 import Account from './components/Account';
 import ClassList from './components/ClassList';
-import NotesList from './components/NotesList';
 
 export default function App() {
   
@@ -25,7 +24,6 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator initalRouteName='MyNotes'>
           <Tab.Screen name='Class List' component={ClassList} />
-          <Tab.Screen name='Class Notes' component={NotesList} />
           <Tab.Screen name='Create Note' component={CreateNote} />
           <Tab.Screen name='Account' children={() => <Account setLoginToken={setLoginToken}/>} />
         </Tab.Navigator>
