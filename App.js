@@ -1,62 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import Navigation from './components/Navigation';
-import * as Facebook from 'expo-facebook'
-import * as SecureStore from 'expo-secure-store'
+import { Text, View, SafeAreaView, ScrollView, Button } from 'react-native';
+import * as Facebook from 'expo-facebook';
+import * as SecureStore from 'expo-secure-store';
+import Login from './components/Login';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import MyNotes from './components/MyNotes';
+import CreateClass from './components/CreateClass';
+import CreateNote from './components/CreateNote';
+import mynotes from './mynotes.json';
+import Logout from './components/Logout';
 
 export default function App() {
   
-  const [logInToken, setToken] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loginToken, setLoginToken] = useState(null);
 
   useEffect(() => {
-    checkForToken()
+    SecureStore.getItemAsync('token').then((res) => {
+      setLoginToken(res);
+    })
   }, [])
 
-  const saveTokenToSecureStorage = async (_token) => {
-    await SecureStore.setItemAsync('token', _token);
-    setToken(_token)
-  }
+  const Tab = createBottomTabNavigator();
 
-  const checkForToken = async () => {
-    let token = await SecureStore.getItemAsync('token')
-    setToken(token)
-    setLoading(false)
-  }  
-
-  const logIn = async () => {
-    try {
-      await Facebook.initializeAsync({appId: '918414992436403', appName: 'Collate'})
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile']
-      })
-  
-      if(type === 'success') {
-        saveTokenToSecureStorage(token) 
-      }
-  
-    } catch({message}) {
-      console.log(message)
-    }
-  }
-
-  if(logInToken === null) {
-    return (
-      <View style={styles.container}>
-        <Button title="Login With Facebook" onPress={() => logIn()}/>
-      </View>
-    );   
-  } else {
-    return <Navigation/>
-  }
-  
+  return (
+    loginToken?
+      <NavigationContainer>
+        <Tab.Navigator initalRouteName='MyNotes'>
+          <Tab.Screen name='MyNotes' component={MyNotes} />
+          <Tab.Screen name='CreateClass' component={CreateClass} />
+          <Tab.Screen name='CreateNote' component={CreateNote} />
+          <Tab.Screen name='Account' children={() => <Logout setLoginToken={setLoginToken}/>} />
+        </Tab.Navigator>
+      </NavigationContainer>
+      : <Login setLoginToken={setLoginToken}/>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
