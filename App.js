@@ -3,10 +3,10 @@ import * as SecureStore from 'expo-secure-store';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MyNotes from './components/MyNotes';
-import CreateClass from './components/CreateClass';
 import CreateNote from './components/CreateNote';
-import Logout from './components/Logout';
+import Account from './components/Account';
+import ClassList from './components/ClassList';
+import NotesList from './components/NotesList';
 
 export default function App() {
   
@@ -24,10 +24,10 @@ export default function App() {
     loginToken?
       <NavigationContainer>
         <Tab.Navigator initalRouteName='MyNotes'>
-          <Tab.Screen name='MyNotes' component={MyNotes} />
-          <Tab.Screen name='CreateClass' component={CreateClass} />
-          <Tab.Screen name='CreateNote' component={CreateNote} />
-          <Tab.Screen name='Account' children={() => <Logout setLoginToken={setLoginToken}/>} />
+          <Tab.Screen name='Class List' component={ClassList} />
+          <Tab.Screen name='Class Notes' component={NotesList} />
+          <Tab.Screen name='Create Note' component={CreateNote} />
+          <Tab.Screen name='Account' children={() => <Account setLoginToken={setLoginToken}/>} />
         </Tab.Navigator>
       </NavigationContainer>
       : <Login setLoginToken={setLoginToken}/>
