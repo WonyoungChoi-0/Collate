@@ -20,7 +20,7 @@ export default function App() {
   const Tab = createBottomTabNavigator();
 
   return (
-    loginToken?
+    loginToken? 
       <NavigationContainer>
         <Tab.Navigator initalRouteName='MyNotes'>
           <Tab.Screen name='Class List' component={ClassList} />

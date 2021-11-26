@@ -23,7 +23,9 @@ export default function Account({setLoginToken}) {
     }, [])
 
     const logout = async () => {
-        setLoginToken(undefined);
+        await SecureStore.deleteItemAsync('token').then(() => {
+            setLoginToken(undefined);
+        });
     }
 
     return (
