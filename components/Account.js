@@ -10,13 +10,13 @@ export default function Account({setLoginToken}) {
 
     useEffect(() => { // gets name of current user
         SecureStore.getItemAsync('token').then((token) => {
-                fetch(`https://graph.facebook.com/me?access_token=${token}`).then((response) => {
-                        response.json().then((object) =>{
-                            setName(object.name);
-                        });
-                }).catch((err) => {
-                    console.log(err);
-                })
+            fetch(`https://graph.facebook.com/me?access_token=${token}`).then((response) => {
+                    response.json().then((object) =>{
+                        setName(object.name);
+                    });
+            }).catch((err) => {
+                console.log(err);
+            });
         }).catch((err) => {
             console.log(err);
         });
