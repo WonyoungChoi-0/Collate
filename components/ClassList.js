@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { collection, doc, addDoc, setDoc } from "firebase/firestore"; 
+import { db } from '../config/firebase'
 
 export default function ClassList() {
 
