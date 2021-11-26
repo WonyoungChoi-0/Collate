@@ -77,27 +77,6 @@ export default function CreateClass({ navigation }){
                     }}
                 />
             </View>
-            <View style={styles.div}>
-                <Text style={styles.subtitle}>Select Existing Class</Text>
-                <DropDownPicker
-                    style={styles.dropDown}
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    // dropDownDirection="TOP"
-                />
-                <Button
-                    title="Create Note"
-                    style={styles.button}
-                    onPress={() => {
-                        setClass(value);
-                        navigation.navigate('CreateNote');
-                    }}
-                />
-            </View>
         </View>
     );
 }
