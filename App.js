@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, SafeAreaView, ScrollView, Button } from 'react-native';
-import * as Facebook from 'expo-facebook';
 import * as SecureStore from 'expo-secure-store';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyNotes from './components/MyNotes';
 import CreateClass from './components/CreateClass';
 import CreateNote from './components/CreateNote';
-import mynotes from './mynotes.json';
 import Logout from './components/Logout';
 
 export default function App() {
