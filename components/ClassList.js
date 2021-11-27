@@ -35,7 +35,7 @@ export default function ClassList({ navigation }) {
         if (userId) {
             // get reference to user in database
             getDoc(doc(db, 'users', userId)).then((docSnap) => {
-                const temp = [];
+                let temp = [];
                 docSnap.get('classes').forEach((classObj) => {
                     temp.push(classObj.name);
                 })
@@ -95,7 +95,9 @@ export default function ClassList({ navigation }) {
                 {classes.map((name) => {
                     return <Button 
                         title={name} key={name}
-                        onPress={() => navigation.navigate('Notes', {className: name})} />
+                        onPress={() => {
+                            navigation.navigate('Notes', {className: name})}}
+                             />
                 })}
             </View>
         </View>

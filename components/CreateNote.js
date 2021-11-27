@@ -1,56 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as SecureStore from 'expo-secure-store';
+import { doc, getDoc, updateDoc } from 'firebase/firestore'; 
+import { db } from '../config/firebase';
 import { GlobalStyles } from '../GlobalStyles';
 
-// Stores the data as a JSON file using AsyncStorage
-const storeData = async (title, note) => {
+export default function CreateNote({ route, navigation }) {
+  const [title, onChangeTitle] = useState('');
+  const [note, onChangeNote] = useState('');
+  const [userId, setUserId] = useState();
 
-  let className;
+  const { className } = route.params;
 
-  try {
-    className = await AsyncStorage.getItem('@class')
-  } catch (e) {
-    console.log(e);
-  }
+  useEffect(() => { 
+    SecureStore.getItemAsync('token')
+        .then((token) => {
+            fetch(`https://graph.facebook.com/me?access_token=${token}`)
+                .then((response) => {
+                    response.json().then((obj) => {
+                        setUserId(obj.id);
+                    }).catch((err) => {
+                        console.log('Error getting response: ', err);
+                    })
+                }).catch((err) => {
+                    console.log('Error fetching token: ', err);
+                });
+        }).catch((err) => {
+            console.log('Error accessing SecureStore ', err);
+        });
+  }, [])
 
-  try {
-    let mynotes = await AsyncStorage.getItem('@mynotes');
-
-    mynotes = JSON.parse(mynotes);
-
-    const noteJSON = {
-      'key': mynotes[className]['notes'].length+1,
-      'title': title,
-      'content': note,
-      'created': new Date().getTime()
+  const storeNote = async (title, note) => {
+    const noteData = {
+      title: title,
+      text: note
     }
 
-    mynotes[className]['notes'].push(noteJSON);
-
-    console.log(mynotes);
-
-    mynotes = JSON.stringify(mynotes);
-
-    await AsyncStorage.setItem('@mynotes', mynotes);
-  } catch (e) {
-    console.log(e);
+    const docRef = await doc(db, 'users', userId);
+    getDoc(docRef).then((docSnap) => {
+      docSnap.get('classes').forEach((course) => {
+        if(course.name === className) {
+          course.notes.push(noteData);
+        }
+      })
+    });
   }
-}
-
-export default function CreateNote({ className, navigation }) {
-  const [title, onChangeTitle] = React.useState('');
-  const [note, onChangeNote] = React.useState('');
 
   return (
     <View>
       <TouchableOpacity 
         onPress={ () => {
-          storeData(title, note);
+          storeNote(title, note);
           onChangeTitle('');
           onChangeNote('');
-          navigation.navigate('MyNotes');
+          navigation.goBack();
         }}
       >
         <Text>Done</Text>

@@ -6,7 +6,7 @@ import { setDoc, doc, getDoc } from "firebase/firestore";
 import { Icon } from 'react-native-elements'
 
 import { db } from '../config/firebase'
-import { GlobalStyles, primaryColor, secondaryColor } from '../GlobalStyles';
+import { GlobalStyles, primaryColor, buttonColor } from '../GlobalStyles';
 
 export default function Login({setLoginToken}) {
 
@@ -81,17 +81,12 @@ export default function Login({setLoginToken}) {
                     color='white'
                 />
             </View>
-            <View style={styles.action}>
-                {/* <Button 
-                    style={styles.button}
-                    title="Login With Facebook" 
-                    onPress={() => login()}
-                /> */}
+            <View style={GlobalStyles.action}>
                 <Pressable 
-                    style={styles.button} 
+                    style={GlobalStyles.button} 
                     onPress={() => login()}
                 >
-                    <Text style={styles.buttonText}>
+                    <Text style={GlobalStyles.buttonText}>
                         Login With Facebook
                     </Text>
                 </Pressable>
@@ -125,29 +120,5 @@ const styles = StyleSheet.create({
         fontSize: 50,
         color: 'white',
         fontWeight: '600',
-    },
-    action: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 30,
-        height: '50%',
-    },
-    button: {
-        borderStyle: 'solid',
-        borderRadius: 20, 
-        borderColor: '#4287f5',
-        borderWidth: 1,
-        height: 40,
-        width: 250,
-        display: 'flex',
-        justifyContent:'center',
-        alignItems: 'center'
-    },
-    buttonText: {
-        textTransform: 'uppercase',
-        color: '#4287f5',
-        fontWeight: 'bold',
     },
 });
