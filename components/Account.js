@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { Icon } from 'react-native-elements'
 
-import { GlobalStyles, primaryColor, secondaryColor } from '../GlobalStyles';
+import { GlobalStyles, primaryColor } from '../GlobalStyles';
 
 export default function Account({setLoginToken}) {
 
@@ -30,7 +30,7 @@ export default function Account({setLoginToken}) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
             <View style={styles.header}>
                 <Text style={styles.text}>
                     Logged in as
@@ -61,11 +61,6 @@ export default function Account({setLoginToken}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-    },
     header: {
         display: 'flex',
         justifyContent: 'center',

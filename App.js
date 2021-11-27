@@ -8,6 +8,8 @@ import CreateNote from './components/CreateNote';
 import Account from './components/Account';
 import ClassList from './components/ClassList';
 import NotesList from './components/NotesList';
+import { Icon } from 'react-native-elements'
+
 
 export default function App() {
   
@@ -37,8 +39,20 @@ export default function App() {
     loginToken? 
       <NavigationContainer>
         <Tab.Navigator initalRouteName='MyNotes'>
-          <Tab.Screen name='Class List' component={ClassStack} options={{headerShown: false}}/>
-          <Tab.Screen name='Account' children={() => <Account setLoginToken={setLoginToken}/>} />
+          <Tab.Screen 
+            name='Class List' 
+            component={ClassStack} 
+            options={{headerShown: false, tabBarIcon: (tabInfo) => (
+              <Icon name='list-ul' type='font-awesome-5'/>
+            )}}
+          />
+          <Tab.Screen 
+            name='Account' 
+            children={() => <Account setLoginToken={setLoginToken}/>} 
+            options={{ tabBarIcon: (tabInfo) => (
+              <Icon name='user-circle' type='font-awesome-5'/>
+            )}}
+          />
         </Tab.Navigator>
       </NavigationContainer>
       : <Login setLoginToken={setLoginToken}/>

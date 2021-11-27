@@ -64,7 +64,7 @@ export default function Login({setLoginToken}) {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
             <View style={styles.header}>
                 <View>
                     <Text style={styles.welcome}>
@@ -96,11 +96,6 @@ export default function Login({setLoginToken}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-    },
     header: {
         display: 'flex',
         flexDirection: 'row',

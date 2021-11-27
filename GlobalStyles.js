@@ -6,6 +6,11 @@ export const secondaryColor = '#F9AD74';
 export const buttonColor = '#4287f5';
 
 export const GlobalStyles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
   button: {
     borderStyle: 'solid',
     borderRadius: 20, 

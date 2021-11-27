@@ -11,7 +11,7 @@ export default function CreateNote({ route, navigation }) {
   const [note, onChangeNote] = useState('');
   const [userId, setUserId] = useState();
 
-  const { className } = route.params;
+  const { className, notes, setNotes } = route.params;
 
   useEffect(() => { 
     SecureStore.getItemAsync('token')
@@ -34,17 +34,27 @@ export default function CreateNote({ route, navigation }) {
   const storeNote = async (title, note) => {
     const noteData = {
       title: title,
-      text: note
+      content: note
     }
 
     const docRef = await doc(db, 'users', userId);
     getDoc(docRef).then((docSnap) => {
-      docSnap.get('classes').forEach((course) => {
+      let classes = docSnap.get('classes');
+      classes.forEach((course) => {
         if(course.name === className) {
           course.notes.push(noteData);
         }
-      })
+      });
+
+      updateDoc(docRef, {
+        'classes' : classes
+      });
+
+      setNotes([...notes, noteData]);
     });
+
+    onChangeTitle('');
+    onChangeNote('');
   }
 
   return (
@@ -52,8 +62,6 @@ export default function CreateNote({ route, navigation }) {
       <TouchableOpacity 
         onPress={ () => {
           storeNote(title, note);
-          onChangeTitle('');
-          onChangeNote('');
           navigation.goBack();
         }}
       >
