@@ -1,11 +1,12 @@
-// display list of classes (as clickable cards), field to enter new class to list
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { doc, getDoc, updateDoc } from 'firebase/firestore'; 
-import { db } from '../config/firebase';
 
-export default function ClassList() {
+import { db } from '../config/firebase';
+import { GlobalStyles } from '../GlobalStyles';
+
+export default function ClassList({ navigation }) {
 
     const [newClass, setNewClass] = useState('');
     const [classes, setClasses] = useState([]);
@@ -92,7 +93,9 @@ export default function ClassList() {
             </View>
             <View>
                 {classes.map((name) => {
-                    return <Text key={name}>{name}</Text>
+                    return <Button 
+                        title={name} key={name}
+                        onPress={() => navigation.navigate('Notes', {className: name})} />
                 })}
             </View>
         </View>

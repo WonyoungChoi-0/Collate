@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Pressable, Text } from 'react-native';
 import * as Facebook from 'expo-facebook'
 import * as SecureStore from 'expo-secure-store'
-import { db } from '../config/firebase'
 import { setDoc, doc, getDoc } from "firebase/firestore"; 
+import { Icon } from 'react-native-elements'
+
+import { db } from '../config/firebase'
+import { GlobalStyles, primaryColor, secondaryColor } from '../GlobalStyles';
 
 export default function Login({setLoginToken}) {
 
@@ -62,19 +65,89 @@ export default function Login({setLoginToken}) {
 
     return (
         <View style={styles.container}>
-            <Button 
-                title="Login With Facebook" 
-                onPress={() => login()}
-            />
+            <View style={styles.header}>
+                <View>
+                    <Text style={styles.welcome}>
+                        Welcome to
+                    </Text>
+                    <Text style={styles.logo}>
+                        Collate
+                    </Text>
+                </View>
+                <Icon
+                    size={100}
+                    name='sticky-note-2'
+                    type='material-icons'
+                    color='white'
+                />
+            </View>
+            <View style={styles.action}>
+                {/* <Button 
+                    style={styles.button}
+                    title="Login With Facebook" 
+                    onPress={() => login()}
+                /> */}
+                <Pressable 
+                    style={styles.button} 
+                    onPress={() => login()}
+                >
+                    <Text style={styles.buttonText}>
+                        Login With Facebook
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: 'white',
-      alignItems: 'center',
-      justifyContent: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+    },
+    header: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 30,
+        height: '50%',
+        backgroundColor: primaryColor,
+    },
+    welcome: {
+        fontSize: 30,
+        marginBottom: 20,
+        color: 'white',
+        fontWeight: '300',
+    },
+    logo: {
+        fontSize: 50,
+        color: 'white',
+        fontWeight: '600',
+    },
+    action: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 30,
+        height: '50%',
+    },
+    button: {
+        borderStyle: 'solid',
+        borderRadius: 20, 
+        borderColor: '#4287f5',
+        borderWidth: 1,
+        height: 40,
+        width: 250,
+        display: 'flex',
+        justifyContent:'center',
+        alignItems: 'center'
+    },
+    buttonText: {
+        textTransform: 'uppercase',
+        color: '#4287f5',
+        fontWeight: 'bold',
     },
 });

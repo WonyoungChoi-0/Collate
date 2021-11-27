@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { GlobalStyles } from '../GlobalStyles';
 
 // Stores the data as a JSON file using AsyncStorage
 const storeData = async (title, note) => {
@@ -37,14 +39,13 @@ const storeData = async (title, note) => {
   }
 }
 
-export default function CreateNote({ navigation }) {
+export default function CreateNote({ className, navigation }) {
   const [title, onChangeTitle] = React.useState('');
   const [note, onChangeNote] = React.useState('');
 
   return (
-    <View style={styles.container}>
+    <View>
       <TouchableOpacity 
-        style={ styles.doneButton }
         onPress={ () => {
           storeData(title, note);
           onChangeTitle('');
@@ -52,10 +53,9 @@ export default function CreateNote({ navigation }) {
           navigation.navigate('MyNotes');
         }}
       >
-        <Text style={ styles.doneText }>Done</Text>
+        <Text>Done</Text>
       </TouchableOpacity>
       <TextInput
-        style={ styles.titleBar }
         onChangeText={title => onChangeTitle(title)}
         placeholder='Title'
         placeholderTextColor='grey'
@@ -63,7 +63,6 @@ export default function CreateNote({ navigation }) {
         value={title}
      />
      <TextInput
-        style={ styles.noteField }
         onChangeText={note => onChangeNote(note)}
         placeholder='Notes'
         placeholderTextColor='grey'
@@ -74,28 +73,3 @@ export default function CreateNote({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: 10,
-    padding: 25,
-  },
-  doneButton: {
-    alignSelf: 'flex-end',
-  },
-  doneText: {
-    color: '#007AFF',
-    fontSize: 20
-  },  
-  titleBar: {
-    height: 50,
-    fontSize: 40,
-    justifyContent: 'flex-start',
-  },
-  noteField: {
-    marginTop: 10,
-    fontSize: 20,
-  }
-});

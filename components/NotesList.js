@@ -1,12 +1,13 @@
-// display all notes for given class (title, text), link to create a note
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+import { Text, View, Button } from 'react-native';
 
-export default function NoteList({classId}) {
+import { GlobalStyles } from '../GlobalStyles';
+
+export default function NoteList({route, navigation}) {
 
     const [notes, setNotes] = useState([]);
-    const [className, setClassName] = useState("");
+
+    const { className } = route.params;
     
     useEffect(() => { 
         // get list of notes for given class id (and user id?)
@@ -21,7 +22,7 @@ export default function NoteList({classId}) {
             <Button 
                 title='Create Note' 
                 onPress={() => {
-                    // navigate to Create Note page, prepopulate class
+                    navigation.navigate('Create', {className: className})
                 }}
             />
             {notes.map((note) => {
