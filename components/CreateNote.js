@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import { doc, getDoc, updateDoc } from 'firebase/firestore'; 
 import { db } from '../config/firebase';
-import { GlobalStyles } from '../GlobalStyles';
+import { GlobalStyles, primaryColor } from '../GlobalStyles';
 
 export default function CreateNote({ route, navigation }) {
   const [title, onChangeTitle] = useState('');
@@ -12,6 +12,8 @@ export default function CreateNote({ route, navigation }) {
   const [userId, setUserId] = useState();
 
   const { className, notes, setNotes } = route.params;
+
+  navigation.setOptions({ title: 'Create Note' });
 
   useEffect(() => { 
     SecureStore.getItemAsync('token')
@@ -32,6 +34,16 @@ export default function CreateNote({ route, navigation }) {
   }, [])
 
   const storeNote = async (title, note) => {
+    if(title === '') {
+      alert('Title is required');
+      return;
+    }
+
+    if(note === '') {
+      alert('Note is required');
+      return;
+    }
+
     const noteData = {
       title: title,
       content: note
@@ -55,33 +67,67 @@ export default function CreateNote({ route, navigation }) {
 
     onChangeTitle('');
     onChangeNote('');
+    navigation.goBack();
   }
 
   return (
-    <View>
-      <TouchableOpacity 
-        onPress={ () => {
-          storeNote(title, note);
-          navigation.goBack();
-        }}
-      >
-        <Text>Done</Text>
-      </TouchableOpacity>
-      <TextInput
-        onChangeText={title => onChangeTitle(title)}
-        placeholder='Title'
-        placeholderTextColor='grey'
-        autoFocus={true}
-        value={title}
-     />
-     <TextInput
-        onChangeText={note => onChangeNote(note)}
-        placeholder='Notes'
-        placeholderTextColor='grey'
-        multiline={true}
-        enablesReturnKeyAutomatically={true}
-        value={note}
-     />
+    <View styles={GlobalStyles.container}>
+      <View styles={styles.inputContainer}>
+        <TextInput
+          style={[styles.input, styles.title]}
+          onChangeText={title => onChangeTitle(title)}
+          placeholder='Title'
+          autoFocus={true}
+          value={title}
+        />
+        <TextInput
+          style={[styles.input, styles.content]}
+          onChangeText={note => onChangeNote(note)}
+          placeholder='Enter your notes here...'
+          multiline={true}
+          enablesReturnKeyAutomatically={true}
+          value={note}
+        />
+      </View>
+      <View style={styles.action}>
+        <Pressable 
+          style={GlobalStyles.button} 
+          onPress={() => {
+            storeNote(title, note);
+          }}
+        >
+          <Text style={GlobalStyles.buttonText}>
+            Done
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+      fontSize: 16,
+      paddingLeft: 20,
+      paddingRight: 20,
+      backgroundColor: 'white',
+  },
+  title: {
+    margin: 20,
+    minHeight: 60,
+  },
+  content: {
+    margin: 20,
+    marginTop: 0,
+    height: 250,
+    paddingTop: 20,
+    paddingBottom: 20
+  },
+  inputContainer: {
+    margin: 20,
+  },
+  action: {
+    display: 'flex',
+    alignItems: 'center'
+  }
+});

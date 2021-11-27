@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, Pressable } from 'react-native';
-import Collapsible from 'react-native-collapsible';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
-import { GlobalStyles, primaryColor, secondaryColor, buttonColor } from '../GlobalStyles';
+import { GlobalStyles, primaryColor } from '../GlobalStyles';
 import * as SecureStore from 'expo-secure-store';
-import { doc, getDoc, updateDoc } from 'firebase/firestore'; 
+import { doc, getDoc } from 'firebase/firestore'; 
 import { db } from '../config/firebase';
 import { Icon } from 'react-native-elements'
 
@@ -54,22 +53,22 @@ export default function NoteList({route, navigation}) {
 
     const _renderHeader = (section) => {
         return (
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>
-                {section.title}
-            </Text>
-            <Icon name='expand-more' type='material-icons'/>
-          </View>
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>
+                    {section.title}
+                </Text>
+                <Icon name='expand-more' type='material-icons'/>
+            </View>
         );
-      };
+    };
     
     const _renderContent = (section) => {
         return (
-          <View style={styles.contentContainer}>
-            <Text>{section.content}</Text>
-          </View>
+            <View style={styles.contentContainer}>
+                <Text>{section.content}</Text>
+            </View>
         );
-      };
+    };
     
     return (
         <View style={GlobalStyles.container}>
@@ -98,7 +97,7 @@ export default function NoteList({route, navigation}) {
                 />
             }
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
