@@ -1,14 +1,15 @@
-// display list of classes (as clickable cards), field to enter new class to list
 import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Pressable, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { doc, getDoc, updateDoc } from 'firebase/firestore'; 
+
 import { db } from '../config/firebase';
+import { GlobalStyles, primaryColor, buttonColor } from '../GlobalStyles';
 
-export default function ClassList() {
+export default function ClassList({ navigation }) {
 
-    const [newClass, setNewClass] = useState('');
-    const [classes, setClasses] = useState([]);
+    const [newClassName, setNewClassName] = useState('');
+    const [classNames, setClassNames] = useState([]);
     const [userId, setUserId] = useState();
 
     useEffect(() => { 
@@ -34,23 +35,23 @@ export default function ClassList() {
         if (userId) {
             // get reference to user in database
             getDoc(doc(db, 'users', userId)).then((docSnap) => {
-                const temp = [];
+                let temp = [];
                 docSnap.get('classes').forEach((classObj) => {
                     temp.push(classObj.name);
                 })
                 // update class list
-                setClasses(temp);
+                setClassNames(temp);
             })
         }
     }, [userId]);
 
     const addClass = async () => {
-        if (classes.includes(newClass)) {
+        if (classNames.includes(newClassName)) {
             alert('This class already exists');
         } else {
-            if (newClass) {
+            if (newClassName) {
                 const classData = {
-                    name: newClass,
+                    name: newClassName,
                     color: 'red',
                     notes: []
                 }
@@ -67,34 +68,92 @@ export default function ClassList() {
                         'classes': temp
                     });
                 }).then(() => {
-                    setClasses([...classes, newClass]);
+                    setClassNames([...classNames, newClassName]);
                 }) 
                 
-                setNewClass('');
+                setNewClassName('');
             } 
         }
     };
     
     return (
-        <View>
-            <View id='create-class'>
-                <Text>Create a New Class</Text>
+        <View style={GlobalStyles.container}>
+            <View style={styles.inputContainer}>
+                {/* <Text>Create a New Class</Text> */}
                 <TextInput
-                    onChangeText={setNewClass}
-                    value={newClass}
+                    style={styles.input}
+                    placeholder='Enter new class name'
+                    onChangeText={setNewClassName}
+                    value={newClassName}
                 />
-                <Button
-                    title='Create Class'
-                    onPress={() => {
-                        addClass();    
-                    }}
-                />
+                <Pressable 
+                    style={GlobalStyles.button} 
+                    onPress={() => addClass()}
+                >
+                    <Text style={GlobalStyles.buttonText}>
+                        Add Class
+                    </Text>
+                </Pressable>
             </View>
-            <View>
-                {classes.map((name) => {
-                    return <Text key={name}>{name}</Text>
+            <ScrollView style={styles.listContainer}>
+                {classNames.map((name) => {
+                    return (
+                        <Pressable
+                            key={`classcard-${name}`}
+                            onPress={() => {
+                                navigation.navigate('Notes', {className: name})
+                            }}
+                        >
+                            <View style={styles.card}>
+                                <Text style={styles.cardText}>
+                                    {name}
+                                </Text>
+                            </View>
+                        </Pressable>
+                    )
                 })}
-            </View>
+            </ScrollView>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    inputContainer: {
+        display: 'flex',
+        height: '25%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 30,
+    },
+    input: {
+        height: 60,
+        width: '100%',
+        fontSize: 16,
+        paddingLeft: 20,
+        paddingRight: 20,
+        backgroundColor: 'white',
+    },
+    listContainer: {
+        height: '75%',
+        padding: 30,
+        backgroundColor: 'white',
+    },
+    card: {
+        minHeight: 50,
+        backgroundColor: primaryColor,
+        marginBottom: 20,
+        shadowColor: 'gray',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 3,
+        elevation: 3,
+        borderRadius: 1, 
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    cardText: {
+        color: 'white',
+        fontSize: 16,
+    }
+});

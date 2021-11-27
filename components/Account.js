@@ -1,8 +1,9 @@
-// display name, statistics, logout button
-
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { Icon } from 'react-native-elements'
+
+import { GlobalStyles, primaryColor } from '../GlobalStyles';
 
 export default function Account({setLoginToken}) {
 
@@ -29,12 +30,50 @@ export default function Account({setLoginToken}) {
     }
 
     return (
-        <View>
-            <Text>Logged in as {name} </Text>
-            <Button 
-                title="Logout" 
-                onPress={() => logout()}
-            />
+        <View style={GlobalStyles.container}>
+            <View style={styles.header}>
+                <Text style={styles.text}>
+                    Logged in as
+                </Text>
+                <Text style={styles.name}>
+                    {name}
+                </Text>
+                <Icon
+                    size={150}
+                    name='user-circle'
+                    type='font-awesome-5'
+                    color={primaryColor}
+                    solid
+                />
+            </View>
+            <View style={GlobalStyles.action}>
+                <Pressable 
+                    style={GlobalStyles.button} 
+                    onPress={() => logout()}
+                >
+                    <Text style={GlobalStyles.buttonText}>
+                        Logout
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    header: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '50%',
+    },
+    text: {
+        fontSize: 20,
+        marginBottom: 10,
+    },
+    name: {
+        fontSize: 30,
+        fontWeight: '600',
+        marginBottom: 40,
+    },
+});

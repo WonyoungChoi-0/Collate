@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Pressable, Text } from 'react-native';
 import * as Facebook from 'expo-facebook'
 import * as SecureStore from 'expo-secure-store'
-import { db } from '../config/firebase'
 import { setDoc, doc, getDoc } from "firebase/firestore"; 
+import { Icon } from 'react-native-elements'
+
+import { db } from '../config/firebase'
+import { GlobalStyles, primaryColor, buttonColor } from '../GlobalStyles';
 
 export default function Login({setLoginToken}) {
 
@@ -61,20 +64,56 @@ export default function Login({setLoginToken}) {
     };
 
     return (
-        <View style={styles.container}>
-            <Button 
-                title="Login With Facebook" 
-                onPress={() => login()}
-            />
+        <View style={GlobalStyles.container}>
+            <View style={styles.header}>
+                <View>
+                    <Text style={styles.welcome}>
+                        Welcome to
+                    </Text>
+                    <Text style={styles.logo}>
+                        Collate
+                    </Text>
+                </View>
+                <Icon
+                    size={100}
+                    name='sticky-note-2'
+                    type='material-icons'
+                    color='white'
+                />
+            </View>
+            <View style={GlobalStyles.action}>
+                <Pressable 
+                    style={GlobalStyles.button} 
+                    onPress={() => login()}
+                >
+                    <Text style={GlobalStyles.buttonText}>
+                        Login With Facebook
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'white',
-      alignItems: 'center',
-      justifyContent: 'center',
+    header: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 30,
+        height: '50%',
+        backgroundColor: primaryColor,
+    },
+    welcome: {
+        fontSize: 30,
+        marginBottom: 20,
+        color: 'white',
+        fontWeight: '300',
+    },
+    logo: {
+        fontSize: 50,
+        color: 'white',
+        fontWeight: '600',
     },
 });

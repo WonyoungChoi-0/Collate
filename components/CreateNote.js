@@ -1,101 +1,133 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import { doc, getDoc, updateDoc } from 'firebase/firestore'; 
+import { db } from '../config/firebase';
+import { GlobalStyles, primaryColor } from '../GlobalStyles';
 
-// Stores the data as a JSON file using AsyncStorage
-const storeData = async (title, note) => {
+export default function CreateNote({ route, navigation }) {
+  const [title, onChangeTitle] = useState('');
+  const [note, onChangeNote] = useState('');
+  const [userId, setUserId] = useState();
 
-  let className;
+  const { className, notes, setNotes } = route.params;
 
-  try {
-    className = await AsyncStorage.getItem('@class')
-  } catch (e) {
-    console.log(e);
-  }
+  navigation.setOptions({ title: 'Create Note' });
 
-  try {
-    let mynotes = await AsyncStorage.getItem('@mynotes');
+  useEffect(() => { 
+    SecureStore.getItemAsync('token')
+        .then((token) => {
+            fetch(`https://graph.facebook.com/me?access_token=${token}`)
+                .then((response) => {
+                    response.json().then((obj) => {
+                        setUserId(obj.id);
+                    }).catch((err) => {
+                        console.log('Error getting response: ', err);
+                    })
+                }).catch((err) => {
+                    console.log('Error fetching token: ', err);
+                });
+        }).catch((err) => {
+            console.log('Error accessing SecureStore ', err);
+        });
+  }, [])
 
-    mynotes = JSON.parse(mynotes);
-
-    const noteJSON = {
-      'key': mynotes[className]['notes'].length+1,
-      'title': title,
-      'content': note,
-      'created': new Date().getTime()
+  const storeNote = async (title, note) => {
+    if(title === '') {
+      alert('Title is required');
+      return;
     }
 
-    mynotes[className]['notes'].push(noteJSON);
+    if(note === '') {
+      alert('Note is required');
+      return;
+    }
 
-    console.log(mynotes);
+    const noteData = {
+      title: title,
+      content: note
+    }
 
-    mynotes = JSON.stringify(mynotes);
+    const docRef = await doc(db, 'users', userId);
+    getDoc(docRef).then((docSnap) => {
+      let classes = docSnap.get('classes');
+      classes.forEach((course) => {
+        if(course.name === className) {
+          course.notes.push(noteData);
+        }
+      });
 
-    await AsyncStorage.setItem('@mynotes', mynotes);
-  } catch (e) {
-    console.log(e);
+      updateDoc(docRef, {
+        'classes' : classes
+      });
+
+      setNotes([...notes, noteData]);
+    });
+
+    onChangeTitle('');
+    onChangeNote('');
+    navigation.goBack();
   }
-}
-
-export default function CreateNote({ navigation }) {
-  const [title, onChangeTitle] = React.useState('');
-  const [note, onChangeNote] = React.useState('');
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity 
-        style={ styles.doneButton }
-        onPress={ () => {
-          storeData(title, note);
-          onChangeTitle('');
-          onChangeNote('');
-          navigation.navigate('MyNotes');
-        }}
-      >
-        <Text style={ styles.doneText }>Done</Text>
-      </TouchableOpacity>
-      <TextInput
-        style={ styles.titleBar }
-        onChangeText={title => onChangeTitle(title)}
-        placeholder='Title'
-        placeholderTextColor='grey'
-        autoFocus={true}
-        value={title}
-     />
-     <TextInput
-        style={ styles.noteField }
-        onChangeText={note => onChangeNote(note)}
-        placeholder='Notes'
-        placeholderTextColor='grey'
-        multiline={true}
-        enablesReturnKeyAutomatically={true}
-        value={note}
-     />
+    <View styles={GlobalStyles.container}>
+      <View styles={styles.inputContainer}>
+        <TextInput
+          style={[styles.input, styles.title]}
+          onChangeText={title => onChangeTitle(title)}
+          placeholder='Title'
+          autoFocus={true}
+          value={title}
+        />
+        <TextInput
+          style={[styles.input, styles.content]}
+          onChangeText={note => onChangeNote(note)}
+          placeholder='Enter your notes here...'
+          multiline={true}
+          enablesReturnKeyAutomatically={true}
+          value={note}
+        />
+      </View>
+      <View style={styles.action}>
+        <Pressable 
+          style={GlobalStyles.button} 
+          onPress={() => {
+            storeNote(title, note);
+          }}
+        >
+          <Text style={GlobalStyles.buttonText}>
+            Done
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  input: {
+      fontSize: 16,
+      paddingLeft: 20,
+      paddingRight: 20,
+      backgroundColor: 'white',
+  },
+  title: {
+    margin: 20,
+    minHeight: 60,
+  },
+  content: {
+    margin: 20,
+    marginTop: 0,
+    height: 250,
+    paddingTop: 20,
+    paddingBottom: 20
+  },
+  inputContainer: {
+    margin: 20,
+  },
+  action: {
     display: 'flex',
-    flexDirection: 'column',
-    marginTop: 10,
-    padding: 25,
-  },
-  doneButton: {
-    alignSelf: 'flex-end',
-  },
-  doneText: {
-    color: '#007AFF',
-    fontSize: 20
-  },  
-  titleBar: {
-    height: 50,
-    fontSize: 40,
-    justifyContent: 'flex-start',
-  },
-  noteField: {
-    marginTop: 10,
-    fontSize: 20,
+    alignItems: 'center'
   }
 });
